@@ -7,8 +7,8 @@ services:
         ports:
             - "5432:5432"
         environment:
-            POSTGRES_DB: laravel_db
-            POSTGRES_USER: laravel_user
+            POSTGRES_DB: YUPCHAT
+            POSTGRES_USER: root
             POSTGRES_PASSWORD: secret
         volumes:
             - pgdata:/var/lib/postgresql/data
