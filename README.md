@@ -3,8 +3,10 @@
 Este é o projeto para o teste para Yup Chat em Laravel que utiliza Docker para gerenciar o banco de dados Postgres.
 Abaixo estão as instruções para configurar e rodar o projeto.
 
-O arquivo para o Postman/Insomnia está na raiz do projeto, para que as requisições possam ser
+O arquivo json para o Postman/Insomnia está na raiz do projeto, para que as requisições possam ser
 testadas e validadas.
+
+```.\\Insomnia_postman.json```
 
 O projeto foi criado utilizando ORM Eloquent e Doctrine para conexão com o postegres, Jwt,
 foi criado um middleware básico para tratamento de exceções,também configurei resources para
