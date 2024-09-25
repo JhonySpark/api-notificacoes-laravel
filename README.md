@@ -14,8 +14,7 @@ fazer o mapeamento json das respostas e requisições.
 
 - PHP 8.2
 - Composer
-- Docker
-- Docker Compose
+- Docker ( para o banco de dados)
 
 ## Configuração do Projeto
 
