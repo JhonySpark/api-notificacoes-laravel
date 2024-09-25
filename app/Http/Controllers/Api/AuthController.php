@@ -23,6 +23,10 @@ class AuthController extends BaseController
             return response()->json($validator->errors()->toJson(), 400);
         }
 
+        if (Usuario::where('email', request()->email)->exists()) {
+            return response()->json(['error' => 'Este email já está cadastrado.'], 400);
+        }
+
         $usuario = new Usuario;
         $usuario->nome = request()->nome;
         $usuario->sobrenome = request()->sobrenome;
@@ -53,14 +57,15 @@ class AuthController extends BaseController
 
     public function logout()
     {
-        auth('api')->logout();
-
-        return response()->json(['message' => 'Successfully logged out']);
+        if (Auth::check()) {
+            JWTAuth::invalidate(JWTAuth::getToken());
+            return response()->json(['message' => 'Usuário deslogado com sucesso']);
+        }
     }
 
     public function refresh()
     {
-        return $this->respondWithToken(JWTAuth::refresh());
+        return $this->respondWithToken(Auth::refresh());
     }
 
     protected function respondWithToken($token)
@@ -68,7 +73,7 @@ class AuthController extends BaseController
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => JWTAuth::factory()->getTTL() * 60
+            'expires_in' => Auth::factory()->getTTL() * 60
         ]);
     }
 }

@@ -76,7 +76,7 @@ class Usuario extends Model implements AuthenticatableContract, JWTSubject
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function tiposNotificacaos()
+    public function tipoNotificacao()
     {
         return $this->hasMany(\App\Models\TipoNotificacao::class, 'id', 'id_usuario');
     }
