@@ -2,43 +2,73 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\TipoNotificacao;
 use Illuminate\Http\Request;
-use App\Http\Requests\TipoNotificacaoRequest;
-use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use App\Models\TipoNotificacao;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\TipoNotificacaoResource;
 
 class TipoNotificacaoController extends Controller
 {
-    public function index(Request $request)
+    public function create(Request $request)
     {
-        $tiposNotificacao = TipoNotificacao::paginate();
+        $validator = Validator::make($request->all(), [
+            'nome' => 'required|string|max:255',
+        ]);
 
-        return TipoNotificacaoResource::collection($tiposNotificacao);
+        if ($validator->fails()) {
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+
+        $tipoNotificacao = TipoNotificacao::create([
+            'id_usuario' => Auth::id(),
+            'nome_tipo' => $request->nome,
+        ]);
+
+        return TipoNotificacaoResource::toFormatted($tipoNotificacao);
     }
 
-    public function store(TipoNotificacaoRequest $request): TipoNotificacao
+    public function update(Request $request, $id)
     {
-        return TipoNotificacao::create($request->validated());
+        $tipoNotificacao = TipoNotificacao::where('id_usuario', Auth::id())->findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'nome' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors()->toJson(), 400);
+        }
+
+        $tipoNotificacao->update([
+            'nome_tipo' => $request->nome,
+        ]);
+
+        return TipoNotificacaoResource::toFormatted($tipoNotificacao);
     }
 
-    public function show(TipoNotificacao $tipoNotificacao): TipoNotificacao
+    public function delete($id)
     {
-        return $tipoNotificacao;
-    }
+        $tipoNotificacao = TipoNotificacao::where('id_usuario', Auth::id())->findOrFail($id);
 
-    public function update(TipoNotificacaoRequest $request, TipoNotificacao $tipoNotificacao): TipoNotificacao
-    {
-        $tipoNotificacao->update($request->validated());
+        // Verificar se há notificações associadas a este tipo de notificação
+        if ($tipoNotificacao->notificacoes()->exists()) {
+            return response()->json(
+                ['error' => 'Não é possível deletar um tipo de notificação que está sendo referenciado em notificações'],
+                400
+            );
+        }
 
-        return $tipoNotificacao;
-    }
-
-    public function destroy(TipoNotificacao $tipoNotificacao): Response
-    {
         $tipoNotificacao->delete();
 
-        return response()->noContent();
+        return response()->json(['message' => 'Tipo de notificação deletado com sucesso']);
+    }
+
+    public function me()
+    {
+        $tiposNotificacoes = TipoNotificacao::where('id_usuario', Auth::id())->get();
+        return TipoNotificacaoResource::collection($tiposNotificacoes);
+
     }
 }

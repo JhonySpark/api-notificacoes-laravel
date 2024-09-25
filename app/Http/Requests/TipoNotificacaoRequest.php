@@ -23,7 +23,7 @@ class TipoNotificacaoRequest extends FormRequest
     {
         return [
 			'id_usuario' => 'required',
-			'nome_tipo' => 'required|string',
+			'nome' => 'required|string',
         ];
     }
 }
