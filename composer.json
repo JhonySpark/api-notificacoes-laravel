@@ -8,12 +8,14 @@
         "php": "^8.2",
         "doctrine/dbal": "^4.1",
         "laravel/framework": "^11.9",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "reliese/laravel": "^1.3",
         "tymon/jwt-auth": "^2.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
+        "ibex/crud-generator": "^2.1",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
