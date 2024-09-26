@@ -11,7 +11,7 @@ Route::group([
 ], function ($router) {
     Route::post('/register', [AuthController::class, 'register'])->name('register');
     Route::post('/login', [AuthController::class, 'login'])->name('login');
-    Route::post('/me', [AuthController::class, 'me'])->middleware('auth:api')->name('me');
+    Route::get('/me', [AuthController::class, 'me'])->middleware('auth:api')->name('me');
 
     // Rotas adicionais
     // Rota para deslogar da aplicação
